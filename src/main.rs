@@ -1,11 +1,19 @@
 use clap::{Parser, Subcommand};
 use std::path::PathBuf;
 
+use uuid::Uuid;
+
+mod stash;
+use stash::Stash;
+
+mod mem_stash;
+use mem_stash::MemStash;
+
 #[derive(Subcommand)]
 enum Command {
-    Add,
-    Remove,
-    Inspect,
+    Add { name: String },
+    Remove { uuid: Uuid },
+    Inspect { uuid: Uuid },
 }
 
 #[derive(Parser)]
@@ -17,34 +25,17 @@ struct Cli {
     command: Command,
 }
 
-pub trait Stash {
-    fn add(&self);
-    fn remove(&self);
-    fn inspect(&self);
-}
-
-struct TestStash {}
-
-impl Stash for TestStash {
-    fn add(&self) {
-        todo!("add item to stash");
-    }
-    fn remove(&self) {
-        todo!("remove item from stash");
-    }
-    fn inspect(&self) {
-        todo!("inspect item in stash");
-    }
-}
-
 fn main() {
     let cli = Cli::parse();
 
-    let s = TestStash {};
+    let mut s = MemStash::new();
 
     match cli.command {
-        Command::Add => s.add(),
-        Command::Remove => s.remove(),
-        Command::Inspect => s.inspect(),
+        Command::Add { name } => {
+            let uuid = s.add(stash::Item::new(&name));
+            println!("ADDED ENTRY: {uuid}");
+        }
+        Command::Remove { uuid } => s.remove(uuid),
+        Command::Inspect { uuid } => s.inspect(uuid),
     };
 }
