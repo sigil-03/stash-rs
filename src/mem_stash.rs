@@ -19,6 +19,12 @@ impl Entry {
     pub fn id(&self) -> Uuid {
         self.id.clone()
     }
+
+    /// pretty print the entry
+    pub fn print(&self) {
+        println!("UUID: {}", self.id);
+        println!("ITEM: {:?}", self.item)
+    }
 }
 
 /// A [`stash::Stash`] which is stored in memory using a hashmap
@@ -45,6 +51,9 @@ impl Stash for MemStash {
         todo!("remove item from stash");
     }
     fn inspect(&self, uuid: Uuid) {
-        todo!("inspect item in stash");
+        match self.storage.get(&uuid) {
+            Some(entry) => entry.print(),
+            None => println!("NO ENTRY FOUND"),
+        };
     }
 }
