@@ -5,4 +5,11 @@ edition = "2021"
 
 [dependencies]
 clap = { version = "4.5.21", features = ["derive"] }
+serde = { version = "1.0.215", features = ["derive"] }
+tokio = { version = "1.41.1", features = ["full", "net", "rt"] }
+toml = "0.8.19"
 uuid = { version = "1.11.0", features = ["v4"] }
+
+[[bin]]
+name = "server"
+path = "src/bin/server/main.rs"

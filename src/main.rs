@@ -3,11 +3,9 @@ use std::path::PathBuf;
 
 use uuid::Uuid;
 
-mod stash;
-use stash::Stash;
+use stash_rs::stash::{Item, Stash};
 
-mod mem_stash;
-use mem_stash::MemStash;
+use stash_rs::mem_stash::MemStash;
 
 #[derive(Subcommand)]
 enum Command {
@@ -32,7 +30,7 @@ fn main() {
 
     match cli.command {
         Command::Add { name } => {
-            let uuid = s.add(stash::Item::new(&name));
+            let uuid = s.add(Item::new(&name));
             println!("ADDED ENTRY: {uuid}");
         }
         Command::Remove { uuid } => s.remove(uuid),
